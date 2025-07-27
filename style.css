@@ -1,449 +1,277 @@
-               /* CSS Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+/* Reset default margins/padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-                /* Main layout styles */
-        body {
-            background-color: #ffffff;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto; /* Centers the body content */
-        }
-        
-        .container {
-            background-color: white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            padding: 40px;
-            height: auto;
-            border-radius: 0px;
-        }
-       
-       .button-wrapper {
+}
+
+/* Navigation Bar Styling */
+nav {
+    /* Center nav bar horizontally */
+    background: #000000;
+    overflow: hidden;
+    width: 1246px; /* Fixed width for consistency */
+    position: absolute; /* Overlay on hero */
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20; /* Higher than .hero and .hero::before */
+    border-radius: 30px 30px 30px 30px; /* Only round bottom corners */
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08); /* Subtle shadow for separation */
+}
+
+nav ul {
+    height: 60px;
+    max-width: 1246px;
+    width: 1246px;
+    line-height: 30px;
+    list-style-type: none;
+    margin: 0 auto;
+    padding: 0;
+    overflow: hidden;
+    background-color: #000000;
+    border-radius: 30px 30px 30px 30px;
+    display: flex;
+    justify-content: center;
+}
+
+nav li {
+    float: left;
+}
+
+nav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 80px;
+    text-decoration: none;
+    font-size: larger;
+    border-radius: 30px;
+    transition: transform 0.3s ease, background 0.3s;
+}
+
+nav li a:hover {
+    background-color: #A31621;
+    transform: scale(1.1);
+}
+
+section {
+    margin-bottom: 50px;
+}
+
+hr {
+    border: 0;
+    border-top: 2px solid #f70202;
+    margin: 30px 0;
+}
+
+/* Hero Section Styling */
+.hero {
+    width: 100%;
+    height: 1024px;
+    background-image: url('images/png9.jpg');
+    opacity: 1;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    position: relative;
+    margin: 0 auto;
+    border-radius: 0px 0px 0px 0px; /* Only round bottom corners */
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08); /* Subtle shadow for separation */
+    overflow: hidden;
+    z-index: 1; /* Lower than nav */
+    /* Add padding-top to make space for nav bar */
+    padding-top: 60px;
+}
+
+/* Semi-transparent overlay (optional) */
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Dark overlay for better text contrast */
+}
+
+/* Text Content Styling */
+.hero-content {
+    position: absolute; /* Position over background */
+    top: calc(50% + 300px); /* Move down by 100px */
+    left: 50%;           /* Horizontal center */
+    transform: translate(-50%, -50%); /* Precise centering */
+    text-align: center;
+    color: white;       /* Light text for contrast */
+    max-width: 800px;   /* Optimal line length */
+    padding: 20px;
+    z-index: 2;         /* Ensure text appears above overlay */
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Improve readability */
+}
+
+.hero-content p {
+    font-size: 1.5rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.hero-content button {
+    padding: 15px 15px 15px 15px; /* Extra left padding for icon */
+    font-size: 2rem;
+    background: #ff0000;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background 0.3s;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* Space between text and icon */
+}
+
+/*.hero-content button::after {
+    content: '›';
+    font-size: 1.2rem;
+    margin-left: 4px;
+    display: inline-block;
+    transition: transform 0.3s;
+}*/
+
+.hero-content button:hover {
+    background: #d05935;
+}
+
+.hero-content button:hover::after {
+    transform: translateX(4px);
+}
+
+.Content{
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    position: relative;
+    padding: 20px 40px;
+    color: rgb(0, 0, 0);
+}
+
+.section-one{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.section-one h2 {
+    font-size: 2.5rem;
+    color: #000000;
+    margin-bottom: 20px;
+}
+
+.section-one.divider {
+    width:100px;
+    height: 4px;
+    background-color: #f70202;
+    margin: 0 auto 20px;
+    border-radius: 30px;
+}
+
+.Resume-Container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*flex-direction: column;
+    margin-top: 20px;*/
+}
+
+.Resume-Container img {
+    width:650px;
+    height: 800px;
+    object-fit: cover;
+    padding: 40px 80px;
+    border-radius: 30px;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.Resume-Content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+    .text-block {
+        padding: 25px;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .text-block:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .top-block {
+        text-align: justify;
+        background-color: #f0f7ff;
+        border-left: 4px solid #3498db;
+    }
+
+    .middle-block {
+        background-color: #f5fff0;
+        border-left: 4px solid #2ecc71;
+    }
+
+    .bottom-block {
+        background-color: #fff7f0;
+        border-left: 4px solid #e67e22;
+    }
+
+    .text-block h3 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        color: #222;
         display: flex;
-        justify-content: center;
         align-items: center;
-        margin: 10px 10px   ;
+        gap: 10px;
+    }
 
-        }   
-            .hello-button {
-            border: 2px solid #000;      /* 2px black border */
-            background-color: #fff;      /* White background */
-            color: #000;                 /* Black text */
-            padding: 12px 24px;          /* Space inside the button */
-            font-size: 20px;             
-            cursor: pointer;
-            border-radius: 20px
-            }
-
-            .hello-button:hover {
-            background-color: #ee0f0f;   /* Slight gray on hover */
-            }
-
-             /* Main navigation styles */
-        ul {
-            height: 60px;
-            line-height: 30px;
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #000000;
-            border-radius: 30px;
+    .text-block p {
+        font-size: 1.1rem;
+        color: #555;
+        line-height: 1.8;
         }
 
-        li {
-        float: left;
+    .icon {
+        font-size: 1.5rem;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #fff;
         }
 
-        li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 80px;
-            text-decoration: none;
-            font-size: larger;
-            border-radius: 30px;   /* Each nav item gets rounded edges */
+    .top-block .icon {
+        color: #3498db;
+        background: rgba(52, 152, 219, 0.1);
+    }
 
-        }
-
-        /* Change the link color to on hover */
-        li a:hover {
-            background-color: #A31621;
-            padding: 14px 80px;
-            transform: scale(1.1);         /* Enlarges the element by */
-            transition: transform 0.3s ease;
-
+    .middle-block .icon {
+        color: #2ecc71;
+        background: rgba(46, 204, 113, 0.1);
         }
 
-                section {
-            margin-bottom: 50px;
-        }
-        
-        hr {
-            border: 0;
-            border-top: 2px solid #e0e0e0;
-            margin: 30px 0;
-        }
-        
-        .foreground-png {
-        position: absolute;
-        top: 50%;
-        right:0;
-        transform: translate(-50%, -50%);  /* Perfectly centers image */
-        z-index: 2;                 /* Higher layer: image sits on top of text */
-        height: 300px;
-        width: 300px;               /* Adjust size to fit your layout */
-        }
-
-        /* Header styles */
-        .header h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-        
-        .header h2 {
-            font-size: 2rem;
-            font-weight: 300;
-            color: #7f8c8d;
-        }
-
-                /* Section titles */
-        .section-title {
-            /*display: block;*/
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #fe2a00;
-            border-left: 5px solid #3498db;
-            padding-left: 15px;
-        }
-
-                /* Section titles */
-        .section-title {
-            /*display: block;*/
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #fe2a00;
-            border-left: 5px solid #3498db;
-            padding-left: 15px;
-        }
-        
-        /* Work experience section */
-        .experience-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-                /* Portfolio section */
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-
-        .header {
-        position: relative;         /* Creates a stacking context for absolute positioning */
-        height: 300px;              /* Adjust as needed */
-        background-color: #eee;
-        text-align: center;
-        overflow: hidden;           /* Keeps content neatly contained */
-        }
-
-        
-        .background-text {
-        font-size: 30px;
-        color: #000000;
-        position: relative;
-        z-index: 1;                 /* Lower layer */
-        }
-
-        .portfolio-item {
-            background: #ecf0f1;
-            padding: 20px;
-            height: 200px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-                
-        .portfolio-item::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(52, 152, 219, 0.8), rgba(46, 204, 113, 0.8));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-                .portfolio-item:hover::before {
-            opacity: 1;
-        }
-        
-        .portfolio-item:hover {
-            transform: translateY(-8px);
-        }
-        
-        .portfolio-item h3 {
-            position: relative;
-            z-index: 2;
-            color: #2c3e50;
-            font-weight: 600;
-        }
-
-                
-        .portfolio-item:hover h3 {
-            color: white;
-        }
-        
-        /* Project ideas section */
-        .project-ideas {
-            background: #2c3e50;
-            padding: 40px;
-            border-radius: 8px;
-            color: white;
-        }
-        
-        .project-title {
-            font-size: 1.8rem;
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: 600;
-        }
-
-                .project-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-        
-        .project-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 25px;
-            border-radius: 6px;
-            text-align: center;
-        }
-        
-        .project-item h3 {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-        }
-
-        .experience-item h3 {
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-            color: #2c3e50;
-        }
-        
-        .experience-item p {
-            color: #7f8c8d;
-            font-weight: 300;
-        }
-
-                /* Why hire section */
-        .hire-section {
-            background: linear-gradient(to right, #3498db, #2c3e50);
-            padding: 30px;
-            border-radius: 8px;
-            color: white;
-        }
-        
-        .hire-title {
-            font-size: 1.8rem;
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: 600;
-        }
-
-                .hire-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            text-align: center;
-        }
-        
-        .hire-item {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 20px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-        
-        .hire-item:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.05);
-        }
-
-                
-        .hire-item h3 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-        }
-        
-        /* Portfolio section */
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-
-        .header {
-        position: relative;         /* Creates a stacking context for absolute positioning */
-        height: 300px;              /* Adjust as needed */
-        background-color: #eee;
-        text-align: center;
-        overflow: hidden;           /* Keeps content neatly contained */
-        }
-
-        .background-text {
-        font-size: 30px;
-        color: #000000;
-        position: relative;
-        z-index: 1;                 /* Lower layer */
-        }
-
-        .foreground-png {
-        position: absolute;
-        top: 50%;
-        right: 0%;
-        transform: translate(-50%, -50%);  /* Perfectly centers image */
-        z-index: 2;                 /* Higher layer: image sits on top of text */
-        height: 300px;
-        width: 250px;               /* Adjust size to fit your layout */
-        }
-        
-                .portfolio-item {
-            background: #ecf0f1;
-            padding: 20px;
-            height: 200px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .portfolio-item::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(52, 152, 219, 0.8), rgba(46, 204, 113, 0.8));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-    
-        .portfolio-item:hover::before {
-            opacity: 1;
-        }
-        
-        .portfolio-item:hover {
-            transform: translateY(-8px);
-        }
-        
-        .portfolio-item h3 {
-            position: relative;
-            z-index: 2;
-            color: #2c3e50;
-            font-weight: 600;
-        }
-                .portfolio-item:hover h3 {
-            color: white;
-        }
-        
-        /* Project ideas section */
-        .project-ideas {
-            background: #2c3e50;
-            padding: 40px;
-            border-radius: 8px;
-            color: white;
-        }
-        
-        .project-title {
-            font-size: 1.8rem;
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: 600;
-        }
-
-                .project-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-        
-        .project-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 25px;
-            border-radius: 6px;
-            text-align: center;
-        }
-        
-        .project-item h3 {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-        }
-
-                .connect-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        /* Responsive design */
-        @media (max-width: 992px) {
-            .portfolio-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .hire-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-                @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-            
-            .header h1 {
-                font-size: 2.5rem;
-            }
-            
-            .header h2 {
-                font-size: 1.5rem;
-            }
-        
-                       
-            .experience-grid, 
-            .project-grid,
-            .connect-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .portfolio-grid {
-                grid-template-columns: 1fr;
-            }
+    .bottom-block .icon {
+        color: #e67e22;
+        background: rgba(230, 126, 34, 0.1);
         }
