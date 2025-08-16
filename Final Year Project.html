@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUBAS | Attendance System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --dark: #25215D;
+            --light: #f8f9fa;
+            --gray: #edd899;
+            --card-bg: #25215d;
+            --sidebar-bg: #1782C5;
+            --header-height: 70px;
+            --sidebar-width: 250px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #25215D 0%, #25215D 100%);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px 0;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .logo {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, #ffffff, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+        }
+
+        .logo span {
+            color: var(--success);
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0 15px;
+        }
+
+        .nav-links li {
+            margin-bottom: 5px;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--light);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: #EDD899;
+            opacity: 0.9;
+            color: var(--success);
+        }
+
+        .nav-links a i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 25px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 30px;
+            transition: var(--transition);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h2 {
+            font-size: 28px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .header h2 i {
+            margin-right: 12px;
+            color: var(--success);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification {
+            position: relative;
+            margin-right: 25px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .notification .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .image img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid var(--success);
+            position: center;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .card-1 .card-icon { background: rgba(67, 97, 238, 0.15); color: #EDD899; }
+        .card-2 .card-icon { background: rgba(67, 97, 238, 0.15); color: #EDD899; }
+        .card-3 .card-icon { background: rgba(67, 97, 238, 0.15); color: #EDD899; }
+        .card-4 .card-icon { background: rgba(67, 97, 238, 0.15); color: #EDD899; }
+
+        .card h3 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .card p {
+            color: var(--gray);
+            font-size: 16px;
+        }
+
+        /* Charts - FIXED SIZE */
+        .charts {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 40px;
+            height: 300px; }
+
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            height: 100%; /* Take full height of parent */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .chart-header select {
+            background: #1782C5;
+            border: none;
+            color:white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .chart-wrapper {
+            flex: 1;
+            position: relative;
+        }
+        
+        .chart-wrapper canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* Session Management */
+        .section-title {
+            margin-top: 200px;
+            font-size: 22px;
+            /*margin: 30px 0 20px;*/
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+            color: var(--success);
+        }
+
+        .session-controls {
+            margin-top:30px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgb(255, 255, 255);
+            font-size: 16px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        /* Sessions Table */
+        .sessions-table {
+            margin-top: 20px;/*--- Add this line: Space ABOVE the table */
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 40px; /* Space below the table */
+            
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 16px 24px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status.active {
+            background: rgba(57, 255, 163, 0.15);
+            color: #39ffa3;
+        }
+
+        .status.completed {
+            background: rgba(76, 201, 240, 0.15);
+            color: #4cc9f0;
+        }
+
+        .status.pending {
+            background: rgba(255, 193, 7, 0.15);
+            color: #EDD899;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            font-size: 18px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: var(--transition);
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .action-btn:hover {
+            color: var(--success);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            width: 500px;
+            max-width: 90%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--danger);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--gray);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        /* Attendance Modal */
+        .attendance-modal .modal-content {
+            width: 700px;
+        }
+        
+        .participants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .participant-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        
+        .participant-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .participant-card.present {
+            border-color: #39ffa3;
+            background: rgba(57, 255, 163, 0.1);
+        }
+        
+        .participant-card.absent {
+            border-color: #f72585;
+            background: rgba(247, 37, 133, 0.1);
+        }
+        
+        .participant-card img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 2px solid var(--success);
+        }
+        
+        .participant-card h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .participant-card .status-indicator {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 15px;
+        }
+        
+        .status-present {
+            background: rgba(57, 255, 163, 0.2);
+            color: #39ffa3;
+        }
+        
+        .status-absent {
+            background: rgba(247, 37, 133, 0.2);
+            color: #f72585;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .charts {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar .logo h1 span,
+            .sidebar .nav-links a span {
+                display: none;
+            }
+            
+            .sidebar .logo h1 {
+                font-size: 26px;
+                text-align: center;
+            }
+            
+            .sidebar .nav-links a {
+                justify-content: center;
+                padding: 15px;
+            }
+            
+            .sidebar .nav-links a i {
+                margin-right: 0;
+                font-size: 22px;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .session-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            th, td {
+                padding: 12px 15px;
+            }
+            
+            .charts {
+                height: auto;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <h1><i class="image"><img src = "mubas-logo-full.png"></i> MUBAS-<span>ATTEND</span></h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" class="active"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+            <li><a href="#"><i class="fas fa-calendar-alt"></i> <span>Sessions</span></a></li>
+            <li><a href="#"><i class="fas fa-users"></i> <span>Participants</span></a></li>
+            <li><a href="#"><i class="fas fa-chart-bar"></i> <span>Reports</span></a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="#"><i class="fas fa-question-circle"></i> <span>Help</span></a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h2><i class="fas fa-home"></i> Dashboard</h2>
+            <div class="user-menu">
+                <div class="notification">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="image">
+                    <img src="image.jpg" alt="User">
+                    <div>
+                        <h4>KELVIN.R WASILI</h4>
+                        <p>LECTURER</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+            <div class="card card-1">
+                <div class="card-icon">
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+                <h3 id="totalSessions">42</h3>
+                <p>Total Sessions</p>
+            </div>
+            <div class="card card-2">
+                <div class="card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 id="totalParticipants">187</h3>
+                <p>Participants</p>
+            </div>
+            <div class="card card-3">
+                <div class="card-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <h3 id="attendanceRate">89.2%</h3>
+                <p>Average Attendance</p>
+            </div>
+            <div class="card card-4">
+                <div class="card-icon">
+                    <i class="fas fa-running"></i>
+                </div>
+                <h3 id="activeSessions">3</h3>
+                <p>Active Sessions</p>
+            </div>
+        </div>
+
+        <!-- Charts - FIXED SIZE -->
+        <div class="charts">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3>Attendance Overview</h3>
+                    <select id="timeRange">
+                        <option>Last 7 Days</option>
+                        <option>Last 30 Days</option>
+                        <option>Last 90 Days</option>
+                    </select>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3>Attendance by Type</h3>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="attendancePie"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Session Management -->
+        <h3 class="section-title"><i class="fas fa-calendar-alt"></i> Session Management</h3>
+        
+       
+        <div class="session-controls">
+            <button class="btn btn-primary" id="createSessionBtn">
+                <i class="fas fa-plus-circle"></i> Create New Session
+            </button>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="sessionSearch" placeholder="Search sessions...">
+            </div>
+        </div>
+
+        <!-- Sessions Table -->
+        <div class="sessions-table">
+            <table id="sessionsTable">
+                <thead>
+                    <tr>
+                        <th>Session Name</th>
+                        <th>Date & Time</th>
+                        <th>Participants</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="sessionsBody">
+                    <!-- Sessions will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Create Session Modal -->
+        <div class="modal" id="sessionModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Create New Session</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="sessionName">Session Name</label>
+                        <input type="text" id="sessionName" placeholder="Enter session name">
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionDate">Date & Time</label>
+                        <input type="datetime-local" id="sessionDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionType">Session Type</label>
+                        <select id="sessionType">
+                            <option>Meeting</option>
+                            <option>Training</option>
+                            <option>Workshop</option>
+                            <option>Presentation</option>
+                            <option>Event</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionLocation">Location</label>
+                        <input type="text" id="sessionLocation" placeholder="Enter location or virtual meeting link">
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionDescription">Description</label>
+                        <textarea id="sessionDescription" rows="3" placeholder="Enter session description"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline close-modal">Cancel</button>
+                    <button class="btn btn-primary" id="saveSessionBtn">Create Session</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance Modal -->
+        <div class="modal attendance-modal" id="attendanceModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="attendanceModalTitle">Mark Attendance: Weekly Team Meeting</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="participants-grid" id="participantsContainer">
+                        <!-- Participants will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline close-modal">Cancel</button>
+                    <button class="btn btn-primary" id="saveAttendanceBtn">Save Attendance</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for the application
+        const sampleParticipants = [
+            { id: 1, name: "Alex Johnson", email: "alex@example.com", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
+            { id: 2, name: "Maria Garcia", email: "maria@example.com", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
+            { id: 3, name: "David Smith", email: "david@example.com", avatar: "https://randomuser.me/api/portraits/men/62.jpg" },
+            { id: 4, name: "Sarah Williams", email: "sarah@example.com", avatar: "https://randomuser.me/api/portraits/women/68.jpg" },
+            { id: 5, name: "James Brown", email: "james@example.com", avatar: "https://randomuser.me/api/portraits/men/86.jpg" },
+            { id: 6, name: "Emma Davis", email: "emma@example.com", avatar: "https://randomuser.me/api/portraits/women/65.jpg" },
+            { id: 7, name: "Michael Wilson", email: "michael@example.com", avatar: "https://randomuser.me/api/portraits/men/75.jpg" },
+            { id: 8, name: "Olivia Martinez", email: "olivia@example.com", avatar: "https://randomuser.me/api/portraits/women/26.jpg" }
+        ];
+
+        let sessions = [
+            {
+                id: 1,
+                name: "Computer Organization and Design",
+                date: "2024-06-15T10:00",
+                type: "Class",
+                location: "Control Lab",
+                description: "This Class is for BECE5 and BETE5 students",
+                participants: 21,
+                attended: 20,
+                status: "active"
+            },
+            {
+                id: 2,
+                name: "Digital Signal Processing",
+                date: "2025-06-14T14:30",
+                type: "Class",
+                location: "E224",
+                description: "BECE4 and BETE4 students will attend this class",
+                participants: 22,
+                attended: 18,
+                status: "completed"
+            },
+            {
+                id: 3,
+                name: "Electrical Circuits Workshop",
+                date: "2025-06-10T09:00",
+                type: "Workshop",
+                location: "T6 B",
+                description: "Hands-on workshop on electrical circuits",
+                participants: 35,
+                attended: 32,
+                status: "completed"
+            },
+            {
+                id: 4,
+                name: "Linear Electronics",
+                date: "2025-06-20T13:00",
+                type: "Class",
+                location: "E225",
+                description: "BEEE3, BECE3 and BETE3 students will attend this class",
+                participants: 45,
+                attended: 0,
+                status: "pending"
+            },
+            {
+                id: 5,
+                name: "SOFTWARE ENGINEERING",
+                date: "2025-06-22T09:30",
+                type: "Class",
+                location: "NT 13",
+                description: "Introduction to software engineering principles",
+                participants: 8,
+                attended: 0,
+                status: "pending"
+            }
+        ];
+
+        let currentSessionId = null;
+        let attendanceData = {};
+
+        // DOM Elements
+        const sessionModal = document.getElementById('sessionModal');
+        const attendanceModal = document.getElementById('attendanceModal');
+        const createSessionBtn = document.getElementById('createSessionBtn');
+        const saveSessionBtn = document.getElementById('saveSessionBtn');
+        const saveAttendanceBtn = document.getElementById('saveAttendanceBtn');
+        const sessionSearch = document.getElementById('sessionSearch');
+        const sessionsBody = document.getElementById('sessionsBody');
+        const participantsContainer = document.getElementById('participantsContainer');
+        const attendanceModalTitle = document.getElementById('attendanceModalTitle');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize charts
+            initCharts();
+            
+            // Populate sessions table
+            renderSessions();
+            
+            // Update dashboard stats
+            updateDashboardStats();
+            
+            // Event listeners
+            setupEventListeners();
+        });
+
+        // Initialize charts
+        function initCharts() {
+            // Line Chart
+            const lineCtx = document.getElementById('attendanceChart').getContext('2d');
+            const lineChart = new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Attendance Rate',
+                        data: [85, 92, 78, 88, 94, 65, 70],
+                        borderColor: '#4cc9f0',
+                        backgroundColor: 'rgba(76, 201, 240, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 50,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: '#8d99ae'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#8d99ae'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Pie Chart
+            const pieCtx = document.getElementById('attendancePie').getContext('2d');
+            const pieChart = new Chart(pieCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Present', 'Late', 'Absent', 'Excused'],
+                    datasets: [{
+                        data: [72, 12, 10, 6],
+                        backgroundColor: [
+                            '#4cc9f0',
+                            '#4361ee',
+                            '#f72585',
+                            '#8d99ae'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#f8f9fa',
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        // Render sessions table
+        function renderSessions() {
+            sessionsBody.innerHTML = '';
+            
+            sessions.forEach(session => {
+                const row = document.createElement('tr');
+                
+                // Format date
+                const sessionDate = new Date(session.date);
+                const formattedDate = sessionDate.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit'
+                });
+                
+                // Status display
+                let statusClass = '';
+                let statusText = '';
+                if (session.status === 'active') {
+                    statusClass = 'active';
+                    statusText = 'Active';
+                } else if (session.status === 'completed') {
+                    statusClass = 'completed';
+                    statusText = 'Completed';
+                } else {
+                    statusClass = 'pending';
+                    statusText = 'Scheduled';
+                }
+                
+                row.innerHTML = `
+                    <td>${session.name}</td>
+                    <td>${formattedDate}</td>
+                    <td>${session.attended || 0}/${session.participants}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="action-btn edit-session" data-id="${session.id}" title="Edit"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn take-attendance" data-id="${session.id}" title="Take Attendance"><i class="fas fa-user-check"></i></button>
+                        <button class="action-btn delete-session" data-id="${session.id}" title="Delete"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                
+                sessionsBody.appendChild(row);
+            });
+            
+            // Add event listeners to action buttons
+            document.querySelectorAll('.edit-session').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const sessionId = this.getAttribute('data-id');
+                    editSession(sessionId);
+                });
+            });
+            
+            document.querySelectorAll('.take-attendance').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const sessionId = this.getAttribute('data-id');
+                    takeAttendance(sessionId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-session').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const sessionId = this.getAttribute('data-id');
+                    deleteSession(sessionId);
+                });
+            });
+        }
+
+        // Update dashboard statistics
+        function updateDashboardStats() {
+            document.getElementById('totalSessions').textContent = sessions.length;
+            
+            // Calculate total participants
+            const uniqueParticipants = new Set();
+            sessions.forEach(session => {
+                // In a real app, we would have actual participant IDs
+                uniqueParticipants.add(`session-${session.id}`);
+            });
+            document.getElementById('totalParticipants').textContent = uniqueParticipants.size;
+            
+            // Calculate average attendance
+            let totalAttendance = 0;
+            let totalPossible = 0;
+            
+            sessions.forEach(session => {
+                if (session.attended && session.participants) {
+                    totalAttendance += session.attended;
+                    totalPossible += session.participants;
+                }
+            });
+            
+            const avgRate = totalPossible > 0 ? (totalAttendance / totalPossible * 100).toFixed(1) : 0;
+            document.getElementById('attendanceRate').textContent = `${avgRate}%`;
+            
+            // Count active sessions
+            const activeSessions = sessions.filter(session => session.status === 'active').length;
+            document.getElementById('activeSessions').textContent = activeSessions;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Modal handling
+            createSessionBtn.addEventListener('click', () => {
+                sessionModal.style.display = 'flex';
+            });
+            
+            saveSessionBtn.addEventListener('click', createSession);
+            
+            closeModalBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    sessionModal.style.display = 'none';
+                    attendanceModal.style.display = 'none';
+                });
+            });
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === sessionModal) {
+                    sessionModal.style.display = 'none';
+                }
+                if (e.target === attendanceModal) {
+                    attendanceModal.style.display = 'none';
+                }
+            });
+            
+            // Session search
+            sessionSearch.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const filteredSessions = sessions.filter(session => 
+                    session.name.toLowerCase().includes(searchTerm) || 
+                    session.description.toLowerCase().includes(searchTerm)
+                );
+                
+                // Re-render table with filtered sessions
+                if (searchTerm === '') {
+                    renderSessions();
+                } else {
+                    renderFilteredSessions(filteredSessions);
+                }
+            });
+            
+            // Save attendance button
+            saveAttendanceBtn.addEventListener('click', saveAttendance);
+        }
+
+        // Create new session
+        function createSession() {
+            const name = document.getElementById('sessionName').value;
+            const date = document.getElementById('sessionDate').value;
+            const type = document.getElementById('sessionType').value;
+            const location = document.getElementById('sessionLocation').value;
+            const description = document.getElementById('sessionDescription').value;
+            
+            if (!name || !date) {
+                alert('Please fill in required fields: Session Name and Date');
+                return;
+            }
+            
+            const newSession = {
+                id: sessions.length + 1,
+                name,
+                date,
+                type,
+                location,
+                description,
+                participants: 0,
+                attended: 0,
+                status: "pending"
+            };
+            
+            sessions.push(newSession);
+            renderSessions();
+            updateDashboardStats();
+            sessionModal.style.display = 'none';
+            
+            // Reset form
+            document.getElementById('sessionName').value = '';
+            document.getElementById('sessionDate').value = '';
+            document.getElementById('sessionType').value = 'Meeting';
+            document.getElementById('sessionLocation').value = '';
+            document.getElementById('sessionDescription').value = '';
+        }
+
+        // Edit session
+        function editSession(sessionId) {
+            const session = sessions.find(s => s.id == sessionId);
+            if (session) {
+                document.getElementById('sessionName').value = session.name;
+                document.getElementById('sessionDate').value = session.date;
+                document.getElementById('sessionType').value = session.type;
+                document.getElementById('sessionLocation').value = session.location;
+                document.getElementById('sessionDescription').value = session.description;
+                
+                sessionModal.style.display = 'flex';
+                
+                // Change button to update
+                saveSessionBtn.textContent = "Update Session";
+                saveSessionBtn.onclick = function() {
+                    updateSession(sessionId);
+                };
+            }
+        }
+
+        // Update session
+        function updateSession(sessionId) {
+            const session = sessions.find(s => s.id == sessionId);
+            if (session) {
+                session.name = document.getElementById('sessionName').value;
+                session.date = document.getElementById('sessionDate').value;
+                session.type = document.getElementById('sessionType').value;
+                session.location = document.getElementById('sessionLocation').value;
+                session.description = document.getElementById('sessionDescription').value;
+                
+                renderSessions();
+                sessionModal.style.display = 'none';
+                
+                // Reset button to create
+                saveSessionBtn.textContent = "Create Session";
+                saveSessionBtn.onclick = createSession;
+            }
+        }
+
+        // Delete session
+        function deleteSession(sessionId) {
+            if (confirm('Are you sure you want to delete this session?')) {
+                sessions = sessions.filter(s => s.id != sessionId);
+                renderSessions();
+                updateDashboardStats();
+            }
+        }
+
+        // Take attendance
+        function takeAttendance(sessionId) {
+            currentSessionId = sessionId;
+            const session = sessions.find(s => s.id == sessionId);
+            
+            if (session) {
+                attendanceModalTitle.textContent = `Mark Attendance: ${session.name}`;
+                
+                // Clear previous attendance data
+                participantsContainer.innerHTML = '';
+                
+                // Initialize attendance data for this session
+                if (!attendanceData[sessionId]) {
+                    attendanceData[sessionId] = {};
+                }
+                
+                // Render participant cards
+                sampleParticipants.forEach(participant => {
+                    const card = document.createElement('div');
+                    card.className = 'participant-card';
+                    card.dataset.id = participant.id;
+                    
+                    // Check if attendance has been marked for this participant
+                    const isPresent = attendanceData[sessionId][participant.id] === 'present';
+                    
+                    if (isPresent) {
+                        card.classList.add('present');
+                    }
+                    
+                    card.innerHTML = `
+                        <img src="${participant.avatar}" alt="${participant.name}">
+                        <h4>${participant.name}</h4>
+                        <div class="status-indicator ${isPresent ? 'status-present' : 'status-absent'}">
+                            ${isPresent ? 'Present' : 'Absent'}
+                        </div>
+                    `;
+                    
+                    card.addEventListener('click', function() {
+                        const participantId = this.dataset.id;
+                        const currentStatus = attendanceData[sessionId][participantId];
+                        
+                        if (currentStatus === 'present') {
+                            attendanceData[sessionId][participantId] = 'absent';
+                            this.classList.remove('present');
+                            this.classList.add('absent');
+                            this.querySelector('.status-indicator').className = 'status-indicator status-absent';
+                            this.querySelector('.status-indicator').textContent = 'Absent';
+                        } else {
+                            attendanceData[sessionId][participantId] = 'present';
+                            this.classList.remove('absent');
+                            this.classList.add('present');
+                            this.querySelector('.status-indicator').className = 'status-indicator status-present';
+                            this.querySelector('.status-indicator').textContent = 'Present';
+                        }
+                    });
+                    
+                    participantsContainer.appendChild(card);
+                });
+                
+                attendanceModal.style.display = 'flex';
+            }
+        }
+
+        // Save attendance
+        function saveAttendance() {
+            if (currentSessionId) {
+                const session = sessions.find(s => s.id == currentSessionId);
+                if (session) {
+                    // Count presents and absents
+                    const attendance = attendanceData[currentSessionId];
+                    let presentCount = 0;
+                    let totalCount = 0;
+                    
+                    for (const participantId in attendance) {
+                        if (attendance[participantId] === 'present') {
+                            presentCount++;
+                        }
+                        totalCount++;
+                    }
+                    
+                    // Update session data
+                    session.attended = presentCount;
+                    session.participants = totalCount;
+                    session.status = "completed";
+                    
+                    // Update UI
+                    renderSessions();
+                    updateDashboardStats();
+                    attendanceModal.style.display = 'none';
+                    
+                    alert(`Attendance saved successfully: ${presentCount} present, ${totalCount - presentCount} absent`);
+                }
+            }
+        }
+
+        // Render filtered sessions
+        function renderFilteredSessions(filteredSessions) {
+            sessionsBody.innerHTML = '';
+            
+            filteredSessions.forEach(session => {
+                const row = document.createElement('tr');
+                
+                // Format date
+                const sessionDate = new Date(session.date);
+                const formattedDate = sessionDate.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit'
+                });
+                
+                // Status display
+                let statusClass = '';
+                let statusText = '';
+                if (session.status === 'active') {
+                    statusClass = 'active';
+                    statusText = 'Active';
+                } else if (session.status === 'completed') {
+                    statusClass = 'completed';
+                    statusText = 'Completed';
+                } else {
+                    statusClass = 'pending';
+                    statusText = 'Scheduled';
+                }
+                
+                row.innerHTML = `
+                    <td>${session.name}</td>
+                    <td>${formattedDate}</td>
+                    <td>${session.attended || 0}/${session.participants}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="action-btn edit-session" data-id="${session.id}" title="Edit"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn take-attendance" data-id="${session.id}" title="Take Attendance"><i class="fas fa-user-check"></i></button>
+                        <button class="action-btn delete-session" data-id="${session.id}" title="Delete"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                
+                sessionsBody.appendChild(row);
+            });
+            
+            // Reattach event listeners
+            document.querySelectorAll('.edit-session').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const sessionId = this.getAttribute('data-id');
+                    editSession(sessionId);
+                });
+            });
+            
+            document.querySelectorAll('.take-attendance').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const sessionId = this.getAttribute('data-id');
+                    takeAttendance(sessionId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-session').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const sessionId = this.getAttribute('data-id');
+                    deleteSession(sessionId);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

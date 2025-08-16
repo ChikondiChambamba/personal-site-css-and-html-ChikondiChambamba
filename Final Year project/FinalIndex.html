@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUBAS Attendance Web App</title>
+    <link rel="stylesheet" href="FinalIndex.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <h1><i class="image"><img src = "mubas-logo-full.png"></i> MUBAS-<span>ATTEND</span></h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" class="active"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+            <li><a href="#"><i class="fas fa-calendar-alt"></i> <span>Sessions</span></a></li>
+            <li><a href="#"><i class="fas fa-users"></i> <span>Participants</span></a></li>
+            <li><a href="#"><i class="fas fa-chart-bar"></i> <span>Reports</span></a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="#"><i class="fas fa-question-circle"></i> <span>Help</span></a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h2><i class="fas fa-home"></i> Dashboard</h2>
+            <div class="user-menu">
+                <div class="notification">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="image">
+                    <img src="image.jpg" alt="User">
+                    <div>
+                        <h4>KELVIN.R WASILI</h4>
+                        <p>LECTURER</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+            <div class="card card-1">
+                <div class="card-icon">
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+                <h3 id="totalSessions">42</h3>
+                <p>Total Sessions</p>
+            </div>
+            <div class="card card-2">
+                <div class="card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 id="totalParticipants">187</h3>
+                <p>Participants</p>
+            </div>
+            <div class="card card-3">
+                <div class="card-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <h3 id="attendanceRate">89.2%</h3>
+                <p>Average Attendance</p>
+            </div>
+            <div class="card card-4">
+                <div class="card-icon">
+                    <i class="fas fa-running"></i>
+                </div>
+                <h3 id="activeSessions">3</h3>
+                <p>Active Sessions</p>
+            </div>
+        </div>
+
+        <!-- Charts - FIXED SIZE -->
+        <div class="charts">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3>Attendance Overview</h3>
+                    <select id="timeRange">
+                        <option>Last 7 Days</option>
+                        <option>Last 30 Days</option>
+                        <option>Last 90 Days</option>
+                    </select>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3>Attendance by Type</h3>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="attendancePie"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Session Management -->
+        <h3 class="section-title"><i class="fas fa-calendar-alt"></i> Session Management</h3>
+        
+       
+        <div class="session-controls">
+            <button class="btn btn-primary" id="createSessionBtn">
+                <i class="fas fa-plus-circle"></i> Create New Session
+            </button>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="sessionSearch" placeholder="Search sessions...">
+            </div>
+        </div>
+
+        <!-- Sessions Table -->
+        <div class="sessions-table">
+            <table id="sessionsTable">
+                <thead>
+                    <tr>
+                        <th>Session Name</th>
+                        <th>Date & Time</th>
+                        <th>Participants</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="sessionsBody">
+                    <!-- Sessions will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Create Session Modal -->
+        <div class="modal" id="sessionModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Create New Session</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="sessionName">Session Name</label>
+                        <input type="text" id="sessionName" placeholder="Enter session name">
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionDate">Date & Time</label>
+                        <input type="datetime-local" id="sessionDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionType">Session Type</label>
+                        <select id="sessionType">
+                            <option>Meeting</option>
+                            <option>Training</option>
+                            <option>Workshop</option>
+                            <option>Presentation</option>
+                            <option>Event</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionLocation">Location</label>
+                        <input type="text" id="sessionLocation" placeholder="Enter location or virtual meeting link">
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionDescription">Description</label>
+                        <textarea id="sessionDescription" rows="3" placeholder="Enter session description"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline close-modal">Cancel</button>
+                    <button class="btn btn-primary" id="saveSessionBtn">Create Session</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance Modal -->
+        <div class="modal attendance-modal" id="attendanceModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="attendanceModalTitle">Mark Attendance: Weekly Team Meeting</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="participants-grid" id="participantsContainer">
+                        <!-- Participants will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline close-modal">Cancel</button>
+                    <button class="btn btn-primary" id="saveAttendanceBtn">Save Attendance</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
